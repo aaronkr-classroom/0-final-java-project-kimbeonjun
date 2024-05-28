@@ -20,7 +20,7 @@ public class GuestWindow extends JFrame {
 		setLayout(null);	// 프레임 레이아웃 미설정
 		
 		Font ft;
-		ft = new Font("함초롱돋움", Font.BOLD, 15);	// 글꼴, 스타일, 크기 설정
+		ft = new Font("함초롬돋움", Font.BOLD, 15);	// 글꼴, 스타일, 크기 설정
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation((screenSize.width - 1000) / 2, (screenSize.height - 750) / 2);	// 컴퓨터 화면에 맞춰 프레임 창을 화면 중앙에 출력
@@ -46,7 +46,7 @@ public class GuestWindow extends JFrame {
 		namePanel.setBounds(0, 400, 1000, 50);
 		add(namePanel);
 		
-		JLabel nameLabel = new JLabel(" 이	름 : ");
+		JLabel nameLabel = new JLabel("이    름 : ");
 		nameLabel.setFont(ft);
 		namePanel.add(nameLabel);
 		
