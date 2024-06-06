@@ -11,6 +11,9 @@ import com.market.cart.Cart;
 import com.market.bookitem.BookInIt;
 import com.market.page.CartAddItemPage;
 import com.market.page.CartItemListPage;
+import com.market.page.CartShippingPage;
+import com.market.page.AdminLoginDialog;
+import com.market.page.AdminPage;
 
 public class MainWindow extends JFrame {
 	
@@ -20,6 +23,7 @@ public class MainWindow extends JFrame {
 	public MainWindow(String title, int x, int y, int width, int height) {
 			
 		initContainer(title, x, y, width, height);
+		initMenu();
 		
 		setVisible(true);
 		setResizable(true);
@@ -153,13 +157,53 @@ public class MainWindow extends JFrame {
 		bt7.setFont(ft);
 		mMenuPanel.add(bt7);
 		
+		bt7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if (mCart.mCartCount == 0)
+					JOptionPane.showMessageDialog(bt7, "장바구니에 항목이 없습니다", "주문처리", JOptionPane.ERROR_MESSAGE);
+				else {
+					
+					mPagePanel.removeAll();
+					mPagePanel.add("주문 배송지", new CartShippingPage(mPagePanel, mCart));
+					mPagePanel.revalidate();
+					mPagePanel.repaint();
+				}
+			}
+		});
+		
 		JButton bt8 = new JButton("종료", new ImageIcon("./images/8.png"));
 		bt8.setFont(ft);
 		mMenuPanel.add(bt8);
 		
+		bt8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int select = JOptionPane.showConfirmDialog(bt8, "쇼핑몰을 종료하겠습니까? ");
+				
+				if (select == 0) {
+					System.exit(1);
+				}
+			}
+		});
+		
 		JButton bt9 = new JButton("관리자", new ImageIcon("./images/9.png"));
 		bt9.setFont(ft);
 		mMenuPanel.add(bt9);
+		bt9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminLoginDialog adminDialog;
+				JFrame frame = new JFrame();
+				adminDialog = new AdminLoginDialog(frame, "관리자 로그인");
+				adminDialog.setVisible(true);
+				if (adminDialog.isLogin) {
+				mPagePanel.removeAll();
+				mPagePanel.add("관리자", new AdminPage(mPagePanel));
+				mPagePanel.revalidate();
+				mPagePanel.repaint();
+			}
+		}
+	});
 		
 		bt1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -184,5 +228,74 @@ public class MainWindow extends JFrame {
 				JOptionPane.showMessageDialog(button, "장바구니의 모든 항목을 삭제했습니다");
 			}
 		}
+	}
+	
+	private void initMenu() {
+		Font ft;
+		ft = new Font("함초롬돋움", Font.BOLD, 15);
+		
+		JMenuBar menuBar = new JMenuBar();
+		
+		JMenu menu01 = new JMenu("고객");
+		menu01.setFont(ft);
+		JMenuItem item01 = new JMenuItem("고객 정보");
+		JMenuItem item11 = new JMenuItem("종료");
+		menu01.add(item01);
+		menu01.add(item11);
+		menuBar.add(menu01);
+		
+		JMenu menu02 = new JMenu("상품");
+		menu02.setFont(ft);
+		JMenuItem item02 = new JMenuItem("상품 목록");
+		menu02.add(item02);
+		menuBar.add(menu02);
+		
+		JMenu menu03 = new JMenu("장바구니");
+		menu03.setFont(ft);
+		JMenuItem item03 = new JMenuItem("항목 추가");
+		JMenuItem item04 = new JMenuItem("항목 수량 줄이기");
+		JMenuItem item05 = new JMenuItem("항목 삭제하기");
+		JMenuItem item06 = new JMenuItem("장바구니 비우기");
+		menu03.add(item03);
+		menu03.add(item04);
+		menu03.add(item05);
+		menu03.add(item06);
+		menuBar.add(menu03);
+		
+		JMenu menu04 = new JMenu("주문");
+		menu04.setFont(ft);
+		JMenuItem item07 = new JMenuItem("영수증 표시");
+		menu04.add(item07);
+		menuBar.add(menu04);
+		setJMenuBar(menuBar);
+		
+		item01.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mPagePanel.removeAll();
+				mPagePanel.add("고객 정보 확인", new GuestInfoPage(mPagePanel));
+				add(mPagePanel);
+				mPagePanel.revalidate();
+			}
+		});
+		
+		item02.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mPagePanel.removeAll();
+				BookInIt.init();
+				mPagePanel.add("장바구니에 항목 추가하기", new CartAddItemPage(mPagePanel, mCart));
+				add(mPagePanel);
+				mPagePanel.revalidate();
+			}
+		});
+		
+		item11.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mPagePanel.removeAll();
+				setVisible(false);
+				new GuestWindow("고객 정보 입력", 0, 0, 1000, 750);
+				add(mPagePanel);
+				mPagePanel.revalidate();
+			}
+		});
 	}
 }
